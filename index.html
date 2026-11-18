@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Te hago fácil tu comida difícil · @belulisss</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --lila:#b9a3e3; --lila-osc:#6f55a8; --lila-suave:#efe8fb; --rosa:#f6dfe6;
+    --crema:#fdfaf6; --tinta:#3b3348; --gris:#7a7088; --borde:#e4daf3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito',sans-serif;background:var(--crema);color:var(--tinta);min-height:100vh;
+    background-image:radial-gradient(circle at 10% 0%,var(--rosa) 0,transparent 40%),radial-gradient(circle at 100% 30%,var(--lila-suave) 0,transparent 45%);
+    background-attachment:fixed}
+  .app{max-width:480px;margin:0 auto;padding:28px 20px 40px;min-height:100vh;display:flex;flex-direction:column}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;line-height:1.15}
+  h1{font-size:2rem;margin-bottom:12px}
+  h2{font-size:1.45rem;margin-bottom:8px}
+  h3{font-size:1.1rem;margin-bottom:6px}
+  p{line-height:1.55}
+  .muted{color:var(--gris)}
+  .screen{display:none;flex-direction:column;flex:1;animation:in .35s ease}
+  .screen.on{display:flex}
+  @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .hero-art{width:120px;height:120px;margin:20px auto 24px}
+  .btn{display:block;width:100%;border:0;border-radius:999px;padding:16px 20px;font:700 1rem 'Nunito',sans-serif;
+    background:var(--lila-osc);color:#fff;cursor:pointer;margin-top:auto;transition:transform .1s,opacity .2s}
+  .btn:active{transform:scale(.98)}
+  .btn:disabled{opacity:.35;cursor:default}
+  .btn.sec{background:var(--lila-suave);color:var(--lila-osc);margin-top:10px}
+  .progress{height:6px;background:var(--borde);border-radius:9px;margin-bottom:24px;overflow:hidden}
+  .progress i{display:block;height:100%;background:var(--lila);border-radius:9px;transition:width .3s}
+  .back{background:none;border:0;color:var(--gris);font:600 .9rem 'Nunito';margin-bottom:12px;cursor:pointer;align-self:flex-start}
+  .opts{display:flex;flex-direction:column;gap:10px;margin:18px 0 24px}
+  .opt{text-align:left;border:2px solid var(--borde);background:#fff;border-radius:16px;padding:15px 16px;font:600 1rem 'Nunito';
+    color:var(--tinta);cursor:pointer;transition:all .15s;display:flex;gap:12px;align-items:center}
+  .opt .dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--lila);flex:none;transition:all .15s}
+  .opt.multi .dot{border-radius:6px}
+  .opt.sel{border-color:var(--lila-osc);background:var(--lila-suave)}
+  .opt.sel .dot{background:var(--lila-osc);border-color:var(--lila-osc);box-shadow:inset 0 0 0 3px var(--lila-suave)}
+  .hint{font-size:.9rem;color:var(--gris);margin-top:4px}
+  .card{background:#fff;border:1px solid var(--borde);border-radius:20px;padding:20px;margin-bottom:16px}
+  .card.lila{background:var(--lila-suave);border-color:transparent}
+  .card.rosa{background:var(--rosa);border-color:transparent}
+  .tag{display:inline-block;font:700 .72rem 'Nunito';letter-spacing:.08em;text-transform:uppercase;color:var(--lila-osc);margin-bottom:8px}
+  ul.ideas{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:10px}
+  ul.ideas li{background:var(--crema);border-radius:12px;padding:10px 12px;font-weight:600}
+  ul.ideas li span{display:block;font-weight:400;font-size:.9rem;color:var(--gris)}
+  ul.ideas details summary{list-style:none;cursor:pointer}
+  ul.ideas details summary::-webkit-details-marker{display:none}
+  ul.ideas summary em{display:inline-block;margin-top:6px;font-style:normal;font-size:.82rem;font-weight:700;color:var(--lila-osc)}
+  ul.ideas details[open] summary em{display:none}
+  .receta{margin-top:10px;font-weight:400;font-size:.92rem;line-height:1.5}
+  .receta b{display:block;margin:10px 0 4px;color:var(--lila-osc)}
+  .receta ul,.receta ol{padding-left:20px}
+  ul.ideas .receta li{background:none;padding:2px 0;font-weight:400;border-radius:0}
+  .receta .nota{margin-top:10px;background:var(--rosa);padding:10px;border-radius:10px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px}
+  .chip{border:2px solid var(--borde);background:#fff;border-radius:999px;padding:8px 14px;font:600 .92rem 'Nunito';color:var(--tinta);cursor:pointer}
+  .chip.sel{background:var(--lila-osc);border-color:var(--lila-osc);color:#fff}
+  .plato{background:var(--lila-suave);border-radius:16px;padding:16px;text-align:center;font-weight:700;min-height:56px}
+  .plato small{display:block;font-weight:400;color:var(--gris);margin-top:4px}
+  .firma{text-align:center;margin-top:28px;color:var(--lila-osc);font-weight:700;letter-spacing:.02em}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:var(--tinta);color:#fff;
+    padding:12px 18px;border-radius:999px;font-weight:600;transition:transform .3s;z-index:9}
+  .toast.on{transform:translateX(-50%) translateY(0)}
+  .result-head{margin-bottom:18px}
+  .small{font-size:.92rem}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Portada -->
+  <section class="screen on" id="s-intro">
+    <svg class="hero-art" viewBox="0 0 120 120" aria-hidden="true">
+      <circle cx="60" cy="60" r="56" fill="#efe8fb"/>
+      <circle cx="60" cy="64" r="34" fill="#fff" stroke="#b9a3e3" stroke-width="3"/>
+      <circle cx="60" cy="64" r="22" fill="none" stroke="#f6dfe6" stroke-width="6"/>
+      <path d="M26 30v22M22 30v10a4 4 0 0 0 8 0V30" stroke="#6f55a8" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M96 30c-6 4-6 16 0 20v14" stroke="#6f55a8" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg>
+    <h1>Te hago FÁCIL tu comida difícil</h1>
+    <p>Cuatro preguntas rapiditas para encontrar <b>tu forma</b> de organizarte con la comida que más te cuesta, con tu rutina tal como es hoy.</p>
+    <p class="muted small" style="margin-top:12px">Te lleva un minuto.</p>
+    <button class="btn" style="margin-top:32px" onclick="go(1)">Empezar</button>
+    <div class="firma">@belulisss</div>
+  </section>
+
+  <!-- Preguntas -->
+  <section class="screen" id="s-q">
+    <button class="back" onclick="back()">← Volver</button>
+    <div class="progress"><i id="bar"></i></div>
+    <h2 id="q-title"></h2>
+    <p class="hint" id="q-hint"></p>
+    <div class="opts" id="q-opts"></div>
+    <button class="btn" id="q-next" disabled onclick="next()">Siguiente</button>
+  </section>
+
+  <!-- Resultado -->
+  <section class="screen" id="s-res">
+    <div id="res"></div>
+    <button class="btn" onclick="copiar()">Copiar mi resultado para el grupo</button>
+    <button class="btn sec" onclick="reiniciar()">Hacerlo de nuevo</button>
+    <div class="firma">@belulisss</div>
+  </section>
+</div>
+<div class="toast" id="toast">¡Copiado! Pegalo en el grupo 💜</div>
+
+<script>
+const PREGUNTAS = [
+  { id:'comida', multi:true, titulo:'¿Qué comida del día te cuesta más organizar?', hint:'Podés elegir más de una.',
+    opts:[['desayuno','Desayuno'],['almuerzo','Almuerzo'],['merienda','Merienda'],['cena','Cena']] },
+  { id:'tiempo', titulo:'¿Cuánto tiempo tenés, en general, para esa comida?',
+    opts:[['nada','Casi nada, como como sale'],['poco','Unos minutos'],['hay','Tengo tiempo, lo que me falta es organizarme']] },
+  { id:'lugar', titulo:'¿Dónde la comés la mayoría de los días?',
+    opts:[['casa','En casa'],['trabajo','En el trabajo'],['viaje','En el auto o en el ómnibus'],['parada','De pie, mientras hago otras cosas']] },
+  { id:'falta', titulo:'¿Qué es lo que más te falta?',
+    opts:[['tiempo','Tiempo'],['ideas','Ideas, siempre como lo mismo'],['pronto','Tenerlo pronto'],['energia','Ganas o energía']] }
+];
+
+const TIEMPO_FRASE = {
+  nada:'Si lo que hay hoy son dos minutos',
+  poco:'Si lo que hay hoy son cinco minutos',
+  hay:'Si hoy tenés el tiempo pero la cabeza está en otro lado'
+};
+const MENTALIDAD = {
+  casa:{ donde:'En casa', pasos:[
+    'Sentate, aunque sean cinco minutos. Nada de comer parada frente a la heladera.',
+    'Serví en un plato o una taza que te guste: ese gesto ya cambia el momento.',
+    'Antes del primer bocado, mirá lo que vas a comer y agradecé que está ahí.'
+  ]},
+  trabajo:{ donde:'En el trabajo', pasos:[
+    'Cerrá la compu o dalo vuelta al celu: esos minutos son tuyos, no del trabajo.',
+    'Si llevás tu tupper, sacalo con calma, como si te sirvieras en casa.',
+    'Antes de empezar, respirá hondo y agradecé lo que te preparaste.'
+  ]},
+  viaje:{ donde:'En el auto o en el ómnibus', pasos:[
+    'Si el momento es ahí, que sea ahí. No es "comer mal": es comer donde hoy se puede.',
+    'Llevalo en algo lindo y práctico, pensado para ese viaje.',
+    'Antes del primer bocado, respirá, mirá lo que llevás y agradecé. El primero, lento y saboreado.'
+  ]},
+  parada:{ donde:'De pie, haciendo otras cosas', pasos:[
+    'Frená solo para el primer bocado: lo mirás, lo olés, lo saboreás.',
+    'Mientras comés, una sola cosa a la vez, aunque sea por un minuto.',
+    'Antes de seguir, agradecé ese ratito. Ya es conexión con tu comida.'
+  ]}
+};
+
+const ORGANIZACION = {
+  tiempo:'No necesitás más tiempo en la semana: necesitás un rato el domingo. Dejás las bases prontas y el día a día es abrir la heladera y servir.',
+  ideas:'Cuando no hay ideas, se repite lo de siempre o se compra lo primero que aparece. Abajo tenés opciones para elegir sin pensar.',
+  pronto:'Lo que está pronto se come; lo que hay que preparar queda para mañana. Por eso la clave es dejar las bases hechas el domingo, y repasar el miércoles.',
+  energia:'Si llegás sin energía, no es momento de cocinar desde cero. Que tu yo del domingo le deje la tarea hecha a tu yo de la semana.'
+};
+
+const DESAYUNO_IDEAS = [
+  { t:'Pancitos de queso', d:'pão de queijo, para agarrar y salir', r:{
+    ing:['Queso: 370 g de semiduro y 300 g de colonia. Se puede hacer todo con semiduro, o usar parmesano, dambo o gouda (si usás dambo, sumale un semiduro).',
+         'Fécula de mandioca: 100 g menos que de queso.',
+         'Manteca blanda, o derretida si no está blanda. Yo la pongo a ojo.',
+         '3 huevos.',
+         'Un poquito de leche o agua, opcional.',
+         'Opcional: remolacha cocida o procesada. En ese caso, agregale un poquito más de fécula.'],
+    pasos:['Poné el queso en la procesadora. También lo podés rallar a mano, o hacerlo en batidora o mezcladora.',
+         'Agregá la manteca y los 3 huevos, y mezclá.',
+         'Agregá la fécula de a poco.',
+         'Cuando la masa está bien manejable, ya está pronta para armar.',
+         'Dividí la masa en dos y hacé un choricito con cada parte.',
+         'Cortá los pedacitos a ojo y hacé bolitas: más chiquitas para congelar y un poco más grandes para comer en el momento. Si no querés hacer bolitas, van al horno con forma más rústica.',
+         'Al horno precalentado a 180°: entre 10 y 15 minutos si es eléctrico, unos 20 si es a gas. Andá chequeando.'],
+    guardar:'Los que no comés en el momento, los frizás. A mí me salieron unos 40 para congelar y 10 para el horno.' }},
+  { t:'Waffles o panqueques', d:'la misma mezcla sirve para los dos; los dejás hechos y solo calentás', r:{
+    ing:['4 huevos.','Media taza de leche, un poquito más.','Harina de avena: 170 g.','Fécula de mandioca: 50 g.','Harina de coco: 26 g.','Manteca: unos 50 g.','Polvo de hornear: una cucharadita.'],
+    pasos:['Batí los 4 huevos.',
+         'Sumá la leche y seguí batiendo.',
+         'Agregá 150 g de harina de avena, la fécula y la harina de coco, y batí bien. Se puede hacer con mixer, batidora o licuadora; yo lo hago a mano para no ensuciar más cosas.',
+         'Dejá reposar la masa unos 10 minutos, así las harinas absorben bien el líquido.',
+         'Agregá la manteca, los 20 g de harina de avena que quedan y el polvo de hornear. Dejala 5 minutos más.',
+         'Si queda muy espesa, agregale un poco más de líquido; si queda muy líquida, un poco más de harina. Depende de las harinas que tengas.',
+         'Cocinalos en la wafflera, mirándolos.',
+         'Para panqueques, con la misma mezcla: precalentá la sartén con manteca o aceite de coco, poné el panquequito con la hornalla baja y tapá. Cuando arriba empiezan a salir agujeritos, dalo vuelta: es un ratito.'],
+    guardar:'En el freezer, para tenerlos a mano.' }},
+  { t:"Budín de zanahoria y manzana, con harina de coco", d:"la rebanada lista, sin cuchillo de por medio", r:{
+    ing:["4 huevos.", "60 g de harina de coco.", "40 g de fécula de mandioca.", "1 zanahoria grande rallada fina (unos 150 g).", "2 manzanas ralladas (unos 250 g).", "60 g de manteca derretida, aceite de coco o ghee.", "1 cucharadita de polvo de hornear.", "Canela a gusto y una pizca de sal."],
+    pasos:["Precalentá el horno a 180° y enmantecá el molde de budín.", "Rallá fino la zanahoria y las manzanas.", "Batí los huevos con la manteca derretida (o el aceite de coco o el ghee).", "Sumá la zanahoria y la manzana rallada, y mezclá.", "Agregá la harina de coco, la fécula, el polvo de hornear, la canela y la sal, y mezclá hasta integrar.", "Dejá reposar la mezcla 5 minutos, así las harinas absorben la humedad.", "Al molde y al horno, entre 35 y 45 minutos. Está pronto cuando pinchás con un palillo y sale seco.", "Dejalo enfriar bien antes de cortarlo: así se rebana sin desarmarse."],
+    guardar:'Una vez frío, rebanalo entero. Guardalo en la heladera, o frizá las rebanadas para sacar de a una.',
+    nota:'El único dulzor es el de la manzana y la zanahoria: queda suave, no como un budín de azúcar. Si usás manzana roja, queda más dulce.' }},
+  { t:"Budín de zanahoria y manzana, con harina de avena", d:"la misma idea, con avena", r:{
+    ing:["3 huevos.", "150 g de harina de avena.", "50 g de fécula de mandioca.", "1 zanahoria grande rallada fina (unos 150 g).", "2 manzanas ralladas (unos 250 g).", "70 g de manteca derretida, aceite de coco o ghee.", "2 cucharaditas de polvo de hornear.", "Canela a gusto y una pizca de sal."],
+    pasos:["Precalentá el horno a 180° y enmantecá el molde de budín.", "Rallá fino la zanahoria y las manzanas.", "Batí los huevos con la manteca derretida (o el aceite de coco o el ghee).", "Sumá la zanahoria y la manzana rallada, y mezclá.", "Agregá la harina de avena, la fécula, el polvo de hornear, la canela y la sal, y mezclá hasta integrar.", "Dejá reposar la mezcla 5 minutos, así las harinas absorben la humedad.", "Al molde y al horno, entre 35 y 45 minutos. Está pronto cuando pinchás con un palillo y sale seco.", "Dejalo enfriar bien antes de cortarlo: así se rebana sin desarmarse."],
+    guardar:'Una vez frío, rebanalo entero. Guardalo en la heladera, o frizá las rebanadas para sacar de a una.',
+    nota:'El único dulzor es el de la manzana y la zanahoria: queda suave, no como un budín de azúcar. Si usás manzana roja, queda más dulce.' }},
+  { t:'Manzanas con manteca y canela', d:'para acompañar o solas', r:{
+    ing:['Manzanas verdes: son menos dulces, y con la manteca quedan bastante dulzonas. También se pueden hacer con manzana roja.','Manteca, a ojo. Podés usar aceite de coco o ghee.','Canela, bastante.'],
+    pasos:['Pelá las manzanas y lavalas.','Cortalas al medio y sacales la parte del medio (si se la querés dejar, como quieras).','Poné la manteca en la sartén y agregá las manzanas y la canela. También se pueden hacer al horno.','Cocinalas.'],
+    guardar:'En la heladera.',
+    nota:'Ojo con los bebés: la manzana tiene riesgo de atragantamiento. Hasta los dos años y medio o tres, dásela siempre cocida, más chiquita o blandita, y siempre mirando cómo come.' }},
+  { t:'Yogur sin azúcar', d:'sumalo al desayuno junto con huevo y palta; y si comés fruta, comela junto con eso, no antes' },
+  { t:'Cereal de quinoa pop', d:'con cacao y agave, hecho por vos', r:{
+    ing:['Quinoa pop.','Cacao.','Agave. También podés usar miel u otro endulzante.','Manteca de coco o aceite de coco para la fuente.','Lo hago sin medidas, todo a ojo.'],
+    pasos:['Poné la quinoa pop en un bowl con el cacao y deshacé los grumitos con una cuchara.',
+         'Agregá el agave de a poco y revolvé, revolvé, revolvé.',
+         'Muy importante: que quede todo bien mezclado, así no se te quema en el horno. Si ves que falta, agregá más agave o un poquito de aceite de coco.',
+         'Untá la fuente con manteca de coco. Una vez no le puse y se me quemó y se me pegó todo.',
+         'Al horno a unos 150°, para que se seque y quede crocante. Estate muy atenta, porque se hace muy rápido: a los 5 minutos fijate cómo está. En menos de 10 minutos ya casi está pronto: separalo un poco y dejalo unos minutos más.',
+         'Dejalo enfriar. Queda crocante y muy parecido a los de caja.'],
+    guardar:'También lo podés comer sin hornear, solo mezclado con el cacao y el endulzante.' }}
+];
+const DESAYUNO_TIP = {
+  nada:'Con casi nada de tiempo, elegí lo que se lleva en la mano: pancitos de queso, una rebanada de budín o un waffle.',
+  poco:'Con unos minutos alcanza para armar algo: yogur con cereal de quinoa pop, o manzanas con canela al lado de un panqueque.',
+  hay:'Si el tiempo está y falta organización, elegí dos o tres de estas y dejalas prontas el domingo. Así la mañana es solo servir.'
+};
+
+const PROTEINAS = ['Carne','Pollo','Cerdo','Pescado'];
+const GRASAS = ['Palta','Aceite de oliva','Aceitunas','Semillas','Frutos secos','Queso'];
+const ENSALADAS = [
+  'Repollo + zanahoria rallada + semillas',
+  'Repollo + zanahoria rallada + palta',
+  'Hojas verdes + zanahoria rallada + tomate',
+  'Hojas verdes + tomate + palta + semillas',
+  'Hojas verdes + verduras cocidas del tupper + queso',
+  'Hojas verdes + tomate + aceitunas + huevo duro',
+  'Hojas verdes + verduras cocidas + frutos secos',
+  'Hojas verdes + tomate + queso + semillas'
+];
+
+let paso = 0;
+const resp = { comida:[], tiempo:null, lugar:null, falta:null };
+const plato = { p:null, huevo:false, g:[], e:null };
+
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on')); document.getElementById(id).classList.add('on'); window.scrollTo(0,0); }
+function go(n){ paso = n-1; render(); show('s-q'); }
+function back(){ if(paso===0){ show('s-intro'); return; } paso--; render(); }
+function next(){ if(paso < PREGUNTAS.length-1){ paso++; render(); } else { resultado(); } }
+
+function render(){
+  const q = PREGUNTAS[paso];
+  document.getElementById('bar').style.width = ((paso+1)/PREGUNTAS.length*100)+'%';
+  document.getElementById('q-title').textContent = q.titulo;
+  document.getElementById('q-hint').textContent = q.hint || '';
+  const cont = document.getElementById('q-opts'); cont.innerHTML='';
+  q.opts.forEach(([val,label])=>{
+    const b = document.createElement('button');
+    b.className = 'opt'+(q.multi?' multi':'');
+    b.innerHTML = '<span class="dot"></span>'+label;
+    const sel = q.multi ? resp[q.id].includes(val) : resp[q.id]===val;
+    if(sel) b.classList.add('sel');
+    b.onclick = ()=>{
+      if(q.multi){ const a=resp[q.id]; const i=a.indexOf(val); i>=0?a.splice(i,1):a.push(val); }
+      else resp[q.id]=val;
+      render();
+    };
+    cont.appendChild(b);
+  });
+  const ok = q.multi ? resp[q.id].length>0 : !!resp[q.id];
+  const btn = document.getElementById('q-next');
+  btn.disabled = !ok;
+  btn.textContent = paso===PREGUNTAS.length-1 ? 'Ver mi resultado' : 'Siguiente';
+}
+
+function caminos(){
+  const c = resp.comida;
+  return { a: c.includes('desayuno')||c.includes('merienda'), b: c.includes('almuerzo')||c.includes('cena') };
+}
+function nombresComidas(){
+  const n = {desayuno:'desayuno',almuerzo:'almuerzo',merienda:'merienda',cena:'cena'};
+  const l = ['desayuno','almuerzo','merienda','cena'].filter(x=>resp.comida.includes(x)).map(x=>n[x]);
+  return l.length>1 ? l.slice(0,-1).join(', ')+' y '+l[l.length-1] : l[0];
+}
+
+function resultado(){
+  const {a,b} = caminos();
+  let h = `<div class="result-head"><span class="tag">Tu resultado</span>
+    <h1 style="font-size:1.7rem">Tu forma de organizar ${nombresComidas()}</h1></div>`;
+
+  const m = MENTALIDAD[resp.lugar];
+  h += `<div class="card lila"><span class="tag">Tu momento</span>
+    <h3>${TIEMPO_FRASE[resp.tiempo]} y ahora no podés cambiar tu circunstancia: ¡creala!</h3>
+    <p class="small">Podés crear el contexto para que ese momento, sea cual sea, genere conexión y gratitud con tu comida.</p>
+    <p class="small" style="margin-top:12px"><b>Cómo crearlo: ${m.donde.toLowerCase()}</b></p>
+    <ul class="ideas">${m.pasos.map(p=>`<li style="font-weight:400;background:#fff">${p}</li>`).join('')}</ul></div>`;
+  h += `<div class="card"><span class="tag">Tu organización</span><p>${ORGANIZACION[resp.falta]}</p></div>`;
+
+  if(a){
+    h += `<div class="card"><span class="tag">Desayunos y meriendas prontos</span>
+      <h3>Qué dejar hecho</h3>
+      <p class="small">${DESAYUNO_TIP[resp.tiempo]}</p>
+      <ul class="ideas">${DESAYUNO_IDEAS.map(i=>i.r ? `<li><details><summary>${i.t}<span>${i.d}</span><em>Ver receta</em></summary>
+        <div class="receta"><b>Ingredientes</b><ul>${i.r.ing.map(x=>`<li>${x}</li>`).join('')}</ul>
+        <b>Pasos</b><ol>${i.r.pasos.map(x=>`<li>${x}</li>`).join('')}</ol>
+        <b>Cómo lo guardo</b><p>${i.r.guardar}</p>${i.r.nota?`<p class="nota">${i.r.nota}</p>`:''}</div></details></li>`
+        : `<li>${i.t}<span>${i.d}</span></li>`).join('')}</ul></div>`;
+  }
+  if(b){
+    h += `<div class="card"><span class="tag">Almuerzos y cenas</span>
+      <h3>Armá tu plato, a tu manera</h3>
+      <p class="small">Sin menú fijo: en cada plato, proteína, grasa buena y una ensalada.</p>
+      <p class="small" style="margin-top:12px"><b>Proteína</b>: elegí una carne. El huevo siempre se puede sumar.</p><div class="chips" data-k="p">${PROTEINAS.map(x=>`<button class="chip">${x}</button>`).join('')}</div>
+      <div class="chips" data-k="huevo" style="margin-top:-8px"><button class="chip">+ Huevo</button></div>
+      <p class="small"><b>Grasas buenas</b>: elegí todas las que quieras.</p><div class="chips" data-k="g">${GRASAS.map(x=>`<button class="chip">${x}</button>`).join('')}</div>
+      <p class="small"><b>Ensalada</b></p><div class="chips" data-k="e">${ENSALADAS.map(x=>`<button class="chip">${x}</button>`).join('')}</div>
+      <div class="plato" id="plato">Elegí y tu plato aparece acá</div>
+      <button class="btn sec" onclick="sorprendeme()">Sorprendeme</button>
+      </div>
+      <div class="card rosa"><span class="tag">Para que esté pronto</span>
+      <p class="small">El domingo, y un repaso el miércoles: proteína porcionada en el freezer, verduras cocidas en tuppers y huevos duros. Y la papa o el boniato, una vez por semana acompañando la carne.</p></div>`;
+  }
+  document.getElementById('res').innerHTML = h;
+  document.querySelectorAll('#res .chips').forEach(c=>{
+    const k = c.dataset.k;
+    c.querySelectorAll('.chip').forEach(ch=>ch.onclick=()=>{
+      const v = ch.textContent;
+      if(k==='huevo') plato.huevo = !plato.huevo;
+      else if(k==='g'){ const i=plato.g.indexOf(v); i>=0?plato.g.splice(i,1):plato.g.push(v); }
+      else plato[k] = plato[k]===v ? null : v;
+      pintarPlato();
+    });
+  });
+  show('s-res');
+}
+
+function pintarPlato(){
+  document.querySelectorAll('#res .chips').forEach(c=>{
+    const k = c.dataset.k;
+    c.querySelectorAll('.chip').forEach(ch=>{
+      const v = ch.textContent;
+      const sel = k==='huevo' ? plato.huevo : k==='g' ? plato.g.includes(v) : plato[k]===v;
+      ch.classList.toggle('sel', sel);
+    });
+  });
+  const el = document.getElementById('plato'); if(!el) return;
+  const prot = [plato.p, plato.huevo?'huevo':null].filter(Boolean).join(' + ');
+  const partes = [prot, plato.g.join(', '), plato.e].filter(Boolean);
+  const falta = [!prot&&'proteína', !plato.g.length&&'grasa', !plato.e&&'ensalada'].filter(Boolean);
+  el.innerHTML = partes.length ? partes.join(' · ') + (falta.length?'<small>Te falta: '+falta.join(', ')+'</small>':'<small>¡Ese es tu plato!</small>') : 'Elegí y tu plato aparece acá';
+}
+function rand(a){ return a[Math.floor(Math.random()*a.length)]; }
+function sorprendeme(){
+  plato.p=rand(PROTEINAS); plato.huevo=Math.random()<.5; plato.e=rand(ENSALADAS);
+  plato.g=[...GRASAS].sort(()=>Math.random()-.5).slice(0,2); pintarPlato();
+}
+function platoTexto(){
+  if(!(plato.p||plato.huevo) || !plato.g.length || !plato.e) return '';
+  const prot = [plato.p, plato.huevo?'huevo':null].filter(Boolean).join(' y ').toLowerCase();
+  return ` Mi plato para probar: ${prot}, con ${plato.g.join(', ').toLowerCase()} y ${plato.e.toLowerCase()}.`;
+}
+
+function textoResultado(){
+  const lugares = {casa:'en casa',trabajo:'en el trabajo',viaje:'en el auto o el ómnibus',parada:'de pie, haciendo otras cosas'};
+  const faltas = {tiempo:'tiempo',ideas:'ideas',pronto:'tenerlo pronto',energia:'ganas o energía'};
+  let t = `Mi comida difícil: ${nombresComidas()}. La como ${lugares[resp.lugar]} y lo que más me falta es ${faltas[resp.falta]}.`;
+  t += platoTexto();
+  return t;
+}
+function copiar(){
+  const t = textoResultado();
+  const ok = ()=>{ const el=document.getElementById('toast'); el.classList.add('on'); setTimeout(()=>el.classList.remove('on'),2200); };
+  try{
+    navigator.clipboard.writeText(t).then(ok).catch(()=>fallback(t,ok));
+  }catch(e){ fallback(t,ok); }
+}
+function fallback(t,ok){
+  const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); ok(); }catch(e){} ta.remove();
+}
+function reiniciar(){ resp.comida=[]; resp.tiempo=resp.lugar=resp.falta=null; plato.p=plato.e=null; plato.huevo=false; plato.g=[]; show('s-intro'); }
+</script>
+</body>
+</html>
